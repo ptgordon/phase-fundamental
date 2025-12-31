@@ -3,9 +3,34 @@ import matplotlib.pyplot as plt
 
 # Parameters
 f0 = 20_000        # phasor frequency (Hz)
-fs = 279          # phase sampling rate (Hz)
+fs = 281          # phase sampling rate (Hz)
 phi0 = 0.0         # initial phase (rad)
 duration = 1        # seconds
+
+p0 = 1/f0
+ps = 1/fs
+
+rotations_per_sample = ps/p0 - np.floor(ps/p0)
+
+rotations = rotations_per_sample
+iters = 1
+
+while rotations <= rotations_per_sample:
+    rotations = rotations + rotations_per_sample
+    rotations = rotations - np.floor(rotations)
+    iters = iters + 1
+
+
+next_peak = rotations_per_sample * iters
+next_peak = next_peak - np.floor(next_peak)
+
+peak_movement = next_peak - rotations_per_sample
+rec_peak_movement = 1/peak_movement
+
+bad_harmonic = fs/rec_peak_movement
+
+print(f"{bad_harmonic}")
+
 
 # Time samples
 t = np.arange(0, duration, 1/fs)
@@ -14,8 +39,6 @@ t = np.arange(0, duration, 1/fs)
 phase = np.mod(2*np.pi*f0*t + phi0 + np.pi, 2*np.pi) - np.pi
 
 # Plot
-
-
 fig, ax = plt.subplots()
 
 fig.patch.set_facecolor("black")     # figure background
