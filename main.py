@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parameters
-f0 = 20_000        # phasor frequency (Hz)
-fs = 281          # phase sampling rate (Hz)
+f0 = 1_000        # phasor frequency (Hz)
+fs = 123          # phase sampling rate (Hz)
 phi0 = 0.0         # initial phase (rad)
 duration = 1        # seconds
 
@@ -15,11 +15,18 @@ rotations_per_sample = ps/p0 - np.floor(ps/p0)
 rotations = rotations_per_sample
 iters = 1
 
-while rotations <= rotations_per_sample:
-    rotations = rotations + rotations_per_sample
-    rotations = rotations - np.floor(rotations)
-    iters = iters + 1
+if rotations_per_sample > .5:
+    while rotations <= rotations_per_sample:
+        rotations = rotations + rotations_per_sample
+        rotations = rotations - np.floor(rotations)
+        iters = iters + 1
+else:
+    while rotations >= rotations_per_sample:
+        rotations = rotations + rotations_per_sample
+        rotations = rotations - np.floor(rotations)
+        iters = iters + 1
 
+print(f"{iters}")
 
 next_peak = rotations_per_sample * iters
 next_peak = next_peak - np.floor(next_peak)
