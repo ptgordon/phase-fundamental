@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Parameters
 f0 = 20_000
 fs = 283
-duration = 4.0
+duration = 1.0
 
 t = np.arange(0, duration, 1/fs)
 x = np.cos(2*np.pi*f0*t)

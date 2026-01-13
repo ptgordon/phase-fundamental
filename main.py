@@ -48,6 +48,23 @@ def main():
         colors[i] = 'red'
 
 # phases samples (wrapped to [-pi, pi])
+    x = np.cos(2*np.pi*f0*t)
+
+# FFT
+    X = np.fft.rfft(x * np.hanning(len(x)))
+    freqs = np.fft.rfftfreq(len(x), d=1/fs)
+
+# Peak frequency
+    idx = np.argmax(np.abs(X))
+    f_est = freqs[idx]
+
+
+# Peak frequency
+    idx = np.argmax(np.abs(X))
+    f_est = freqs[idx]
+
+    print(f"Estimated fundamental (FFT): {f_est:.2f} Hz")
+
 
 # Plot
     fig, ax = plt.subplots()
