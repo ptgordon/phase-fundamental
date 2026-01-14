@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
+
 def main():
-# Parameters
+    # Parameters
     f0 = 20_000          # phasor frequency (Hz)
     fs = 283            # phases sampling rate (Hz)
     phi0 = 0.0          # initial phases (rad)
@@ -13,14 +14,13 @@ def main():
         f0 = int(sys.argv[1])
         fs = int(sys.argv[2])
     else:
-        print("no arguments provided, using defaults of 20 kHz and 283 Hz sample")
+        print("no arguments provided, \
+                using defaults of 20 kHz and 283 Hz sample")
 
     t = np.arange(0, duration, 1/fs)
     phases = np.mod(2*np.pi*f0*t + phi0 + np.pi, 2*np.pi) - np.pi
     # phases = np.mod(2*np.pi*f0*t, 2*np.pi)
     print(f"{phases}")
-
-    first_phase = phases[1]
 
 # phases samples (wrapped to [-pi, pi])
     x = np.cos(2*np.pi*f0*t)
@@ -28,7 +28,7 @@ def main():
 # FFT
     X = np.fft.rfft(x * np.hanning(len(x)))
     freqs = np.fft.rfftfreq(len(x), d=1/fs)
-    print(f"{X}")
+    # print(f"{X}")
 
 # Peak frequency
     idx = np.argmax(np.abs(X))
