@@ -20,32 +20,7 @@ def main():
     # phases = np.mod(2*np.pi*f0*t, 2*np.pi)
     print(f"{phases}")
 
-    iters = 1
     first_phase = phases[1]
-
-    for phase in phases[1:]:
-        iters = iters+1
-        if abs(phase) < abs(first_phase):
-            break
-
-    print(f"points before inner wrap: {iters}")
-
-    next_corr_point = phases[iters-1]
-    print(f"{next_corr_point}")
-
-    corr_point_movement = abs(phases[1]) - abs(next_corr_point) 
-
-    rec_corr_point_movement = phases[1]/(np.pi/corr_point_movement)
-
-    block_wrap = fs/rec_corr_point_movement
-
-    print(f"observed wraps of blocks: {block_wrap}")
-
-# Time samples
-    colors = ['cyan'] * len(t)
-
-    for i in range(0, len(t), iters-1):
-        colors[i] = 'red'
 
 # phases samples (wrapped to [-pi, pi])
     x = np.cos(2*np.pi*f0*t)
@@ -53,17 +28,27 @@ def main():
 # FFT
     X = np.fft.rfft(x * np.hanning(len(x)))
     freqs = np.fft.rfftfreq(len(x), d=1/fs)
-
-# Peak frequency
-    idx = np.argmax(np.abs(X))
-    f_est = freqs[idx]
-
+    print(f"{X}")
 
 # Peak frequency
     idx = np.argmax(np.abs(X))
     f_est = freqs[idx]
 
     print(f"Estimated fundamental (FFT): {f_est:.2f} Hz")
+
+    points_per_cycle = fs/f_est
+    rounded_ppc = round(points_per_cycle)
+
+    percent_movement = abs(rounded_ppc - points_per_cycle)
+    number_of_periods = f_est*percent_movement
+
+    print(f"number of periods: {number_of_periods}")
+
+# Time samples
+    colors = ['cyan'] * len(t)
+
+    for i in range(0, len(t), rounded_ppc):
+        colors[i] = 'red'
 
 
 # Plot
@@ -72,9 +57,9 @@ def main():
     fig.patch.set_facecolor("black")     # figure background
     ax.set_facecolor("black")            # axes background
 
-    ax.scatter(t, phases, c = colors, marker='x')
+    ax.scatter(t, phases, c=colors, marker='x')
 
-    ax.plot(t, phases, c = 'cyan')
+    ax.plot(t, phases, c='cyan')
 
     ax.tick_params(colors="white")
     ax.xaxis.label.set_color("white")
