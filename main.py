@@ -39,6 +39,8 @@ def main():
     points_per_cycle = fs/f_est
     rounded_ppc = round(points_per_cycle)
 
+    print(f"points per cycle: {points_per_cycle}")
+
     percent_movement = abs(rounded_ppc - points_per_cycle)
     number_of_periods = f_est*percent_movement
 
